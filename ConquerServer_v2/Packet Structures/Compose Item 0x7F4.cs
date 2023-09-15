@@ -14,7 +14,9 @@ namespace ConquerServer_v2.Packet_Structures
         public ushort Type;
         public uint dwJunk;
         public uint MainItem;
-        public uint MinorItem;
-        public fixed sbyte TQServer[8];
+        public uint MinorItem1;
+        public uint MinorItem2;
+        public uint Gem1;
+        public uint Gem2;
     }
 }

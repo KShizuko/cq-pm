@@ -16,9 +16,6 @@ namespace ConquerServer_v2.Core
             ShieldID = 900,
             BackswordID = 421,
             SwordID = 420,
-            NinjaSwordID = 601,
-            FanID = 201,
-            TowerID = 202,
             GarmentID_1 = 181,
             GarmentID_2 = 182,
             BottleID = 2100,
@@ -33,7 +30,6 @@ namespace ConquerServer_v2.Core
     {
         uint UID { get; }
         uint ID { get; }
-        ushort Color { get; }
         ushort X { get; }
         ushort Y { get; }
         MapID MapID { get; }
@@ -49,7 +45,7 @@ namespace ConquerServer_v2.Core
     public unsafe class Item : INpcItem
     {
         public const ItemPosition FirstSlot = ItemPosition.Head;
-        public const ItemPosition LastSlot = ItemPosition.DefenceTalisman;
+        public const ItemPosition LastSlot = ItemPosition.Garment;
         public const byte MaxBless = 7;
         public const byte MaxPlus = 12;
 
@@ -104,9 +100,6 @@ namespace ConquerServer_v2.Core
         public byte Plus { get { return Data.Plus; } set { Data.Plus = value; } }
         public byte Bless { get { return Data.Bless; } set { Data.Bless = value; } }
         public byte Enchant { get { return Data.Enchant; } set { Data.Enchant = value; } }
-        public byte Color { get { return Data.Color; } set { Data.Color = value; } }
-        public int ComposeProgress { get { return Data.ComposeProgress; } set { Data.ComposeProgress = value; } }
-        public bool Free { get { return Data.Free; } set { Data.Free = value; } }
 
         public void Send(GameClient Client)
         {
@@ -158,20 +151,12 @@ namespace ConquerServer_v2.Core
             if (check)
             {
                 check = (item_type != ItemTypeConst.ShieldID);
-                if (check)
-                {
-                    check = (item_type != ItemTypeConst.NinjaSwordID);
-                }
             }
             return check;
         }
         public bool IsGarment()
         {
             return IsItemType(ItemTypeConst.GarmentID_1) || IsItemType(ItemTypeConst.GarmentID_2);
-        }
-        public bool IsTalismen()
-        {
-            return IsItemType(ItemTypeConst.FanID) || IsItemType(ItemTypeConst.TowerID);
         }
         public int GetSmallItemType()
         {
@@ -207,8 +192,6 @@ namespace ConquerServer_v2.Core
         public byte Plus { get { return Data.Plus; } set { Data.Plus = value; } }
         public byte Bless { get { return Data.Bless; } set { Data.Bless = value; } }
         public byte Enchant { get { return Data.Enchant; } set { Data.Enchant = value; } }
-        public byte Color { get { return (byte)Data.Color; } set { Data.Color = value; } }
-        public int ComposeProgress { get { return Data.ComposeProgress; } set { Data.ComposeProgress = value; } }
         public int Price { get { return Data.Price; } set { Data.Price = value; } }
         public uint ShopID { get { return Data.ShopID; } set { Data.ShopID = value; } }
 
@@ -232,8 +215,6 @@ namespace ConquerServer_v2.Core
             Plus = item.Plus;
             Bless = item.Bless;
             Enchant = item.Enchant;
-            Color = item.Color;
-            ComposeProgress = item.ComposeProgress;
         }
         public Item ToItem()
         {
@@ -248,8 +229,6 @@ namespace ConquerServer_v2.Core
             item.Plus = Plus;
             item.Bless = Bless;
             item.Enchant = Enchant;
-            item.Color = Color;
-            item.ComposeProgress = ComposeProgress;
             return item;
         }
     }

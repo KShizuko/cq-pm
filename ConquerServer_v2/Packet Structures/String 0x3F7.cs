@@ -26,10 +26,10 @@ namespace ConquerServer_v2.Packet_Structures
         public StringID ID;
         public static implicit operator byte[](StringPacket Packet)
         {
-            byte[] Buffer = new byte[20 + Packet.Strings.Length + Packet.StringsLength];
+            byte[] Buffer = new byte[11 + Packet.Strings.Length + Packet.StringsLength];
             fixed (byte* Pointer = Buffer)
             {
-                Packet.Size = *((ushort*)(Pointer + 0)) = (ushort)(Buffer.Length - 8);
+                Packet.Size = *((ushort*)(Pointer + 0)) = (ushort)Buffer.Length;
                 Packet.Type = *((ushort*)(Pointer + 2)) = 0x3F7;
                 *((uint*)(Pointer + 4)) = Packet.UID;
                 *((StringID*)(Pointer + 8)) = Packet.ID;
@@ -44,7 +44,6 @@ namespace ConquerServer_v2.Packet_Structures
                         i += (ushort)(1 + Buffer[i]);
                     }
                 }
-                PacketBuilder.AppendTQServer(Pointer, Buffer.Length);
             }
             return Buffer;
         }
@@ -54,10 +53,10 @@ namespace ConquerServer_v2.Packet_Structures
             StringPacket retn = new StringPacket();
             //fixed (byte* Packet = Bytes)
             //{
-                retn.Size = *((ushort*)(Packet + 0));
-                retn.Type = *((ushort*)(Packet + 2));
-                retn.UID = *((uint*)(Packet + 4));
-                retn.ID = *((StringID*)(Packet + 8));
+            retn.Size = *((ushort*)(Packet + 0));
+            retn.Type = *((ushort*)(Packet + 2));
+            retn.UID = *((uint*)(Packet + 4));
+            retn.ID = *((StringID*)(Packet + 8));
             //}
             return retn;
         }

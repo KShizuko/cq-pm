@@ -92,13 +92,6 @@ namespace ConquerServer_v2.Client
                         case 4: Skills = new ushort[] { 5000 }; break;
                     }
                     break;
-                case 5: // ninja
-                    switch (RebornInto)
-                    {
-                        case 5: Skills = new ushort[] { 6000, 6001, 6002, 6003, 6010, 6011 }; break;
-                        default: Skills = new ushort[] { 6001 }; break;
-                    }
-                    break;
                 case 13: // water tao
                     switch (RebornInto)
                     {

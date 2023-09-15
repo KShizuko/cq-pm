@@ -29,7 +29,7 @@ namespace ConquerServer_v2.Client
         public static int ClientInstances = 0;
 
         public NetworkClient NetworkSocket;
-        public BlowfishCrypter Crypto;
+        public GameCryptographer Crypto;
         public CommonEntity Entity;
         public ServerFlags ServerFlags;
         public StatData Stats;
@@ -45,7 +45,6 @@ namespace ConquerServer_v2.Client
         public FlexibleArray<ISkill> Spells;
         public FlexibleArray<IAssociate> Friends;
         public FlexibleArray<IAssociate> Enemies;
-        public FlexibleArray<MentorStudent> Students;
         public TimeStampCollection TimeStamps;
         public INpcPlayer NpcLink;
         public SafePointer AutoAttackPtr;
@@ -152,7 +151,7 @@ namespace ConquerServer_v2.Client
             PacketStart = TIME.Now;
             ClientInstances++;
             NetworkSocket = Client;
-            Crypto = new BlowfishCrypter();
+            Crypto = new GameCryptographer(false);
             Entity = new CommonEntity(this, EntityFlag.Player);
             Inventory = new ClientInventory(this);
             Equipment = new ClientEquipment(this);
@@ -164,7 +163,6 @@ namespace ConquerServer_v2.Client
             Proficiencies = new FlexibleArray<ISkill>();
             Spells = new FlexibleArray<ISkill>();
             Friends = new FlexibleArray<IAssociate>();
-            Students = new FlexibleArray<MentorStudent>();
             Gems = new double[GemsConst.MaxGems];
             MAttackDataPtr = new SafePointer(sizeof(MAttackData));
             AutoAttackPtr = new SafePointer(sizeof(RequestAttackPacket));
@@ -189,7 +187,7 @@ namespace ConquerServer_v2.Client
                     if (fSend = Monitor.TryEnter(this, 50))
                     {
                         ushort Size = *((ushort*)Ptr);
-                        byte[] Chunk = new byte[Size + 8];
+                        byte[] Chunk = new byte[Size];
                         Crypto.Encrypt((byte*)Ptr, Chunk, Chunk.Length);
                         NetworkSocket.Send(Chunk);
                     }

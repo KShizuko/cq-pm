@@ -111,7 +111,7 @@ namespace ConquerServer_v2.Core
         public ushort GuildID { get { return Spawn.GuildID; } set { Spawn.GuildID = value; } }
         public GuildRank GuildRank { get { return Spawn.GuildRank; } set { Spawn.GuildRank = value; } }
         public ushort Hairstyle { get { return Spawn.Hairstyle; } set { Spawn.Hairstyle = value; } }
-        public NobilityID Nobility { get { return Spawn.Nobility; } set { Spawn.Nobility = value; } }
+        public uint Nobility { get { return Spawn.Nobility; } set { Spawn.Nobility = value; } }
         public ConquerAngle Facing { get { return Spawn.Facing; } set { Spawn.Facing = value; } }
         public ConquerAction Action { get { return Spawn.Action; } set { Spawn.Action = value; } }
         public uint Model { get { return Spawn.Model; } set { Spawn.Model = value; } }

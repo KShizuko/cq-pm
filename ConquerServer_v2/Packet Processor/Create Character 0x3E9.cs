@@ -14,18 +14,16 @@ namespace ConquerServer_v2.Packet_Processor
     {
         public static void CreateCharacter(GameClient Client, CreateCharacterPacket* Info)
         {
-            MessagePacket FuckOff = new MessagePacket("No, fuck you.", "ALLUSERS", 0x00FFFFFF, ChatID.CharacterCreation);
             if (Info->Job != 10 && Info->Job != 20 &&
-                Info->Job != 40 && Info->Job != 50 &&
-                Info->Job != 100)
+                Info->Job != 40 && Info->Job != 100)
             {
-                Client.Send(FuckOff);
+                Client.Send(new MessagePacket("Invalid class chosen.", "ALLUSERS", 0x00FFFFFF, ChatID.CharacterCreation));
                 return;
             }
             if (Info->Mesh != 1003 && Info->Mesh != 1004 &&
                 Info->Mesh != 2001 && Info->Mesh != 2002)
             {
-                Client.Send(FuckOff);
+                Client.Send(new MessagePacket("Invalid body size chose.", "ALLUSERS", 0x00FFFFFF, ChatID.CharacterCreation));
                 return;
             }
             string CharacterName = Info->CharacterName;

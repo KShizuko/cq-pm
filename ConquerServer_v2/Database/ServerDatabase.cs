@@ -81,7 +81,6 @@ namespace ConquerServer_v2.Database
 
             Tournaments.Init();
             Warehouse.Init();
-            NobilityScoreBoard.Init();
             Console.WriteLine("\tLoaded {0} Lottery Items.", Lottery.Init());
 
             IniFile ini = new IniFile();
@@ -396,8 +395,6 @@ namespace ConquerServer_v2.Database
                 Job = "Warrior";
             else if (bJob >= 40 && bJob <= 45)
                 Job = "Archer";
-            else if (bJob >= 50 && bJob <= 55)
-                Job = "Ninja";
             else
                 Job = "Taoist";
             string Lvl = Math.Min(wLvl, (ushort)120).ToString();
@@ -426,25 +423,17 @@ namespace ConquerServer_v2.Database
             IniFile rdr;
             StanderdItemStats standerd = new StanderdItemStats(Item.ID, out rdr);
 
-            if (Item.Position == ItemPosition.DefenceTalisman)
+            if (Client.InTransformation)
             {
-                Client.TalismenDefence = standerd.PhysicalDefence;
-                Client.TalismenMDefence = standerd.MDefence;
+                Client.Transform.Defence += standerd.PhysicalDefence;
+                Client.Transform.MDefence += standerd.MDefence;
+                Client.Transform.Dodge += standerd.Dodge;
             }
             else
             {
-                if (Client.InTransformation)
-                {
-                    Client.Transform.Defence += standerd.PhysicalDefence;
-                    Client.Transform.MDefence += standerd.MDefence;
-                    Client.Transform.Dodge += standerd.Dodge;
-                }
-                else
-                {
-                    Client.Entity.Defence += standerd.PhysicalDefence;
-                    Client.Entity.MDefence += standerd.MDefence;
-                    Client.Entity.Dodge += standerd.Dodge;
-                }
+                Client.Entity.Defence += standerd.PhysicalDefence;
+                Client.Entity.MDefence += standerd.MDefence;
+                Client.Entity.Dodge += standerd.Dodge;
             }
 
             Client.BaseMagicAttack += standerd.MAttack;
@@ -457,23 +446,15 @@ namespace ConquerServer_v2.Database
                 Client.AttackRange += standerd.AttackRange;
             }
 
-            if (Item.Position == ItemPosition.AttackTalisman)
+            if (Item.Position == ItemPosition.Left)
             {
-                Client.TalismenAttack = standerd.MaxAttack;
-                Client.TalismenMAttack = standerd.MAttack;
+                Client.BaseMinAttack += (int)(standerd.MinAttack * 0.5F);
+                Client.BaseMaxAttack += (int)(standerd.MaxAttack * 0.5F);
             }
             else
             {
-                if (Item.Position == ItemPosition.Left)
-                {
-                    Client.BaseMinAttack += (int)(standerd.MinAttack * 0.5F);
-                    Client.BaseMaxAttack += (int)(standerd.MaxAttack * 0.5F);
-                }
-                else
-                {
-                    Client.BaseMinAttack += standerd.MinAttack;
-                    Client.BaseMaxAttack += standerd.MaxAttack;
-                }
+                Client.BaseMinAttack += standerd.MinAttack;
+                Client.BaseMaxAttack += standerd.MaxAttack;
             }
 
             if (Item.Plus != 0)
@@ -508,25 +489,17 @@ namespace ConquerServer_v2.Database
             IniFile rdr;
             StanderdItemStats standerd = new StanderdItemStats(Item.ID, out rdr);
 
-            if (Item.Position == ItemPosition.DefenceTalisman)
+            if (Client.InTransformation)
             {
-                Client.TalismenDefence = 0;
-                Client.TalismenMDefence = 0;
+                Client.Transform.Defence -= standerd.PhysicalDefence;
+                Client.Transform.MDefence -= standerd.MDefence;
+                Client.Transform.Dodge -= standerd.Dodge;
             }
             else
             {
-                if (Client.InTransformation)
-                {
-                    Client.Transform.Defence -= standerd.PhysicalDefence;
-                    Client.Transform.MDefence -= standerd.MDefence;
-                    Client.Transform.Dodge -= standerd.Dodge;
-                }
-                else
-                {
-                    Client.Entity.Defence -= standerd.PhysicalDefence;
-                    Client.Entity.MDefence -= standerd.MDefence;
-                    Client.Entity.Dodge -= standerd.Dodge;
-                }
+                Client.Entity.Defence -= standerd.PhysicalDefence;
+                Client.Entity.MDefence -= standerd.MDefence;
+                Client.Entity.Dodge -= standerd.Dodge;
             }
 
             Client.BaseMagicAttack -= standerd.MAttack;
@@ -538,23 +511,16 @@ namespace ConquerServer_v2.Database
                 Client.AttackRange = 0;
             }
 
-            if (Item.Position == ItemPosition.AttackTalisman)
+
+            if (Item.Position == ItemPosition.Left)
             {
-                Client.TalismenAttack = 0;
-                Client.TalismenMAttack = 0;
+                Client.BaseMinAttack -= (int)(standerd.MinAttack * 0.5F);
+                Client.BaseMaxAttack -= (int)(standerd.MaxAttack * 0.5F);
             }
             else
             {
-                if (Item.Position == ItemPosition.Left)
-                {
-                    Client.BaseMinAttack -= (int)(standerd.MinAttack * 0.5F);
-                    Client.BaseMaxAttack -= (int)(standerd.MaxAttack * 0.5F);
-                }
-                else
-                {
-                    Client.BaseMinAttack -= standerd.MinAttack;
-                    Client.BaseMaxAttack -= standerd.MaxAttack;
-                }
+                Client.BaseMinAttack -= standerd.MinAttack;
+                Client.BaseMaxAttack -= standerd.MaxAttack;
             }
 
             if (Item.Plus != 0)
@@ -583,27 +549,6 @@ namespace ConquerServer_v2.Database
                 Client.BlessPercent -= Item.Bless;
                 GemAlgorithm(Client, Item.SocketOne, Item.SocketTwo, false);
             }
-        }
-
-        public static void SaveMentorStudents(string Account, ref FlexibleArray<MentorStudent> Students)
-        {
-            BinaryFile binary = new BinaryFile();
-            if (binary.Open(Path + "\\UserMentorStudents\\" + Account + ".bin", FileMode.Create))
-            {
-                DatabaseMentorStudent db_student = new DatabaseMentorStudent();
-                int student_count = Students.Length;
-                binary.Write(&student_count, sizeof(int));
-                for (int i = 0; i < student_count; i++)
-                {
-                    db_student.FromStudent(Students.Elements[i]);
-                    binary.Read(&db_student, sizeof(DatabaseMentorStudent));
-                }
-                binary.Close();
-            }
-        }
-        private static void SaveMentorStudents(GameClient Client)
-        {
-            SaveMentorStudents(Client.Account, ref Client.Students);
         }
         public static void SaveAssociates(string Account, ref FlexibleArray<IAssociate> Friends, ref FlexibleArray<IAssociate> Enemies)
         {
@@ -749,30 +694,7 @@ namespace ConquerServer_v2.Database
             SaveItems(Client);
             SaveSkills(Client);
             SaveAssociates(Client);
-            SaveMentorStudents(Client);
             Client.Guild.SaveMemberInfo();
-        }
-
-        public static void LoadMentorStudents(string Account, ref FlexibleArray<MentorStudent> Students)
-        {
-            BinaryFile binary = new BinaryFile();
-            if (binary.Open(Path + "\\UserMentorStudents\\" + Account + ".bin", FileMode.Open))
-            {
-                DatabaseMentorStudent db_student;
-                int student_count;
-                binary.Read(&student_count, sizeof(int));
-                Students.SetCapacity(student_count);
-                for (int i = 0; i < student_count; i++)
-                {
-                    binary.Read(&db_student, sizeof(DatabaseMentorStudent));
-                    Students.Add(db_student.GetStudent());
-                }
-                binary.Close();
-            }
-        }
-        private static void LoadMentorStudents(GameClient Client)
-        {
-            LoadMentorStudents(Client.Account, ref Client.Students);
         }
         public static void LoadAssociates(string Account, ref FlexibleArray<IAssociate> Friends, ref FlexibleArray<IAssociate> Enemies)
         {
@@ -907,9 +829,9 @@ namespace ConquerServer_v2.Database
                         Client.Entity.Mesh = rdr.ReadUInt16("Character", "Mesh", 1003);
                         Client.Entity.Avatar = rdr.ReadUInt16("Character", "Avatar", 0);
                         Client.Entity.Reborn = rdr.ReadByte("Character", "RebornCount", 0);
-                        Client.Entity.Hairstyle = rdr.ReadUInt16("Character", "Hairstyle", 421);
+                        Client.Entity.Hairstyle = rdr.ReadUInt16("Character", "Hairstyle", 310);
                         Client.Entity.Hitpoints = rdr.ReadInt32("Character", "Health", 1);
-                        Client.Entity.Nobility = (NobilityID)rdr.ReadUInt32("Character", "Nobility", 0);
+                        Client.Entity.Nobility = 12;
 
                         Client.AddPKPoints(rdr.ReadUInt16("Character", "PKPoints", 0));
                         Client.Job = rdr.ReadByte("Character", "Job", 10);
@@ -945,7 +867,6 @@ namespace ConquerServer_v2.Database
                         LoadItems(Client);
                         LoadSkills(Client);
                         LoadAssociates(Client);
-                        LoadMentorStudents(Client);
 
                         failed_load = false;
                     }
@@ -1042,6 +963,24 @@ namespace ConquerServer_v2.Database
                 sql.Write<ushort>("Character", "MapID", 1002);
                 sql.Write<ushort>("Character", "X", 439);
                 sql.Write<ushort>("Character", "Y", 387);
+            }
+        }
+        public static void NewUsername(string Username, string Password)
+        {
+            IniFile ini = new IniFile(Path + "\\Accounts\\" + Username + ".ini");
+            if (File.Exists(ini.FileName))
+            {
+                Console.WriteLine("Username is taken.");
+            }
+            else
+            {
+                ini.WriteString("Account", "Username", Username);
+                ini.WriteString("Account", "Password", Password);
+                ini.WriteString("Character", "Name", "INVALIDNAME");
+                DirectoryInfo info = new DirectoryInfo(Path + "\\Accounts\\");
+                ini.WriteString("Character", "UID", "1000000" + info.GetFiles().Length);
+                ini.WriteString("Character", "GM", "2");
+                Console.WriteLine("Account was successfully created.");
             }
         }
     }

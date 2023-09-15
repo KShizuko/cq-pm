@@ -7,7 +7,7 @@ using ConquerServer_v2.Client;
 
 namespace ConquerServer_v2.Packet_Structures
 {
-    public unsafe struct SpawnNpcPacket 
+    public unsafe struct SpawnNpcPacket
     {
         public ushort Size;
         public ushort Type;
@@ -34,7 +34,6 @@ namespace ConquerServer_v2.Packet_Structures
             SpawnNpcPacket packet = new SpawnNpcPacket();
             packet.Size = 0x14;
             packet.Type = 0x7EE;
-            PacketBuilder.AppendTQServer(packet.Strings, 8);
             return packet;
         }
         public void ConvertToVendor(string Name)
@@ -50,7 +49,6 @@ namespace ConquerServer_v2.Packet_Structures
             {
                 MSVCRT.memset(_Strings, 0, 24);
                 Name.CopyTo(_Strings);
-                PacketBuilder.AppendTQServer(_Strings + Name.Length + 1, 8);
             }
         }
         public void ConvertToStandard()
@@ -63,7 +61,6 @@ namespace ConquerServer_v2.Packet_Structures
             fixed (byte* _Strings = Strings)
             {
                 MSVCRT.memset(_Strings, 0, 24);
-                PacketBuilder.AppendTQServer(_Strings, 8);
             }
         }
     }

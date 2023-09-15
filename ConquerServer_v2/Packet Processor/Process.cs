@@ -195,19 +195,8 @@ namespace ConquerServer_v2.Packet_Processor
                     case 0x7EF: NpcStartup(Client, (NpcClickPacket*)Packet); break;
                     case 0x7F0: NpcContinue(Client, (NpcClickPacket*)Packet); break;
                     case 0x7F4: ComposeItems(Client, (ComposeItemPacket*)Packet); break;
-                    case 0x810:
-                        {
-                            NobilityRankType rankType = NobilityRankPacket.ID(Packet);
-                            SubID = (int)rankType;
-                            switch (rankType)
-                            {
-                                case NobilityRankType.Listings: ShowNobilityRankings(Client, Packet); break;
-                                case NobilityRankType.Donate: DonateNobility(Client, Packet); break;
-                            }
-                            break;
-                        }
-                    case 0x2715: Walk(Client, (MovementPacket*)Packet); break;
-                    case 0x271A:
+                    case 1005: Walk(Client, (MovementPacket*)Packet); break;
+                    case 1010:
                         {
                             DataPacket* dPtr = (DataPacket*)Packet;
                             SubID = (int)dPtr->ID;

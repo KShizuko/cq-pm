@@ -4,7 +4,7 @@ using ConquerServer_v2.Client;
 
 namespace ConquerServer_v2.Packet_Structures
 {
-    public enum DropID : ushort
+    public enum DropID : uint
     {
         Visible = 0x01,
         Remove = 0x02,
@@ -27,16 +27,15 @@ namespace ConquerServer_v2.Packet_Structures
             public short MaxDurability;
         }
 
-        public ushort Size;
-        public ushort Type;
-        private uint m_UID;
-        private uint m_ID;
-        private ushort m_X;
-        private ushort m_Y;
-        private ushort m_Color;
-        public DropID DropType;
-        public fixed sbyte TQServer[8];
-        private MapID m_MapID;
+        public ushort Size; //0
+        public ushort Type; //2
+        private uint m_UID; //4
+        private uint m_ID; //8
+        private ushort m_X; //12
+        private ushort m_Y; //14
+        public DropID DropType; //16
+
+        private MapID m_MapID; 
         private TIME m_RemoveTime;
         private TIME m_ProtectionTime;
         public SmallItemData Item;
@@ -67,8 +66,7 @@ namespace ConquerServer_v2.Packet_Structures
         }
 
         public TIME RemoveTime { get { return m_RemoveTime; } }
-        public uint ID { get { return m_ID; }  }
-        public ushort Color { get { return m_Color; } }
+        public uint ID { get { return m_ID; } }
         public int Gold { get { return m_Gold; } set { m_Gold = value; } }
         public Item GetItem()
         {
@@ -82,7 +80,6 @@ namespace ConquerServer_v2.Packet_Structures
             original.SocketTwo = Item.SocketTwo;
             original.Durability = Item.Durability;
             original.MaxDurability = Item.MaxDurability;
-            original.Color = (byte)m_Color;
             return original;
         }
         public uint KillerUID { get { return m_KillerUID; } }
@@ -94,8 +91,6 @@ namespace ConquerServer_v2.Packet_Structures
             retn.Size = 0x14;
             retn.Type = 0x44D;
             retn.DropType = DropID.Visible;
-            retn.m_Color = Original.Color;
-            PacketBuilder.AppendTQServer((byte*)retn.TQServer, 8);
             retn.m_RemoveTime = TIME.Now.AddSeconds(30);
             retn.m_ID = Original.ID;
             retn.m_UID = Original.UID;
@@ -124,7 +119,6 @@ namespace ConquerServer_v2.Packet_Structures
             retn.Size = 0x14;
             retn.Type = 0x44D;
             retn.DropType = DropID.Visible;
-            PacketBuilder.AppendTQServer((byte*)retn.TQServer, 8);
             retn.m_RemoveTime = TIME.Now.AddSeconds(30);
             retn.m_ID = ItemId;
             retn.m_UID = ConquerServer_v2.Core.Item.NextUID;

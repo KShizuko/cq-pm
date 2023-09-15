@@ -29,10 +29,10 @@ namespace ConquerServer_v2.Packet_Structures
         public SpellAnimationPacket() { }
         public static implicit operator byte[](SpellAnimationPacket MAttack)
         {
-            byte[] Packet = new byte[0x20 + (MAttack.Targets.Count * 12) + 8];
+            byte[] Packet = new byte[28 + (MAttack.Targets.Count * 12)];
             fixed (byte* Pointer = Packet)
             {
-                *((ushort*)(Pointer + 0)) = (ushort)(Packet.Length - 8);
+                *((ushort*)(Pointer + 0)) = (ushort)Packet.Length;
                 *((ushort*)(Pointer + 2)) = 0x451;
                 *((uint*)(Pointer + 4)) = MAttack.AttackerUID;
                 *((ushort*)(Pointer + 8)) = MAttack.X;
@@ -50,7 +50,6 @@ namespace ConquerServer_v2.Packet_Structures
                         ax += 12;
                     }
                 }
-                PacketBuilder.AppendTQServer(Pointer, Packet.Length);
             }
             return Packet;
         }

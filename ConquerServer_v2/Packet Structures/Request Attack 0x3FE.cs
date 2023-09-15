@@ -11,7 +11,7 @@ namespace ConquerServer_v2.Packet_Structures
     {
         None = 0x00,
         Physical = 0x02,
-        Magic = 0x18,
+        Magic = 0x15,
         Archer = 0x1C,
         RequestMarriage = 0x08,
         AcceptMarriage = 0x09,
@@ -45,7 +45,6 @@ namespace ConquerServer_v2.Packet_Structures
             get { fixed (void* ptr = &SpellID) { return *((int*)ptr); } }
             set { fixed (void* ptr = &SpellID) { *((int*)ptr) = value; } } 
         }
-        public fixed sbyte TQServer[8];
 
         // Extra Informaiton used in re-casting (autoattack)
         public ushort AttackerX;
@@ -88,14 +87,13 @@ namespace ConquerServer_v2.Packet_Structures
         }
         public static void MoveData(void* New, void* Old)
         {
-            MSVCRT.memcpy(New, Old, *((ushort*)Old) + 8);
+            MSVCRT.memcpy(New, Old, *((ushort*)Old));
         }
         public static RequestAttackPacket Create()
         {
             RequestAttackPacket retn = new RequestAttackPacket();
             retn.Size = 0x1C;
             retn.Type = 0x3FE;
-            PacketBuilder.AppendTQServer((byte*)retn.TQServer, 8);
             return retn;
         }
     }

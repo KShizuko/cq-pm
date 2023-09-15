@@ -12,7 +12,6 @@ namespace ConquerServer_v2.Packet_Structures
         private uint Region;
         private uint ID;
         public uint Status;
-        public fixed byte TQServer[8];
 
         public uint MapID
         {
@@ -25,7 +24,6 @@ namespace ConquerServer_v2.Packet_Structures
             MapStatusPacket retn = new MapStatusPacket();
             retn.Size = 0x10;
             retn.Type = 0x456;
-            PacketBuilder.AppendTQServer(retn.TQServer, 8);
             return retn;
         }
     }

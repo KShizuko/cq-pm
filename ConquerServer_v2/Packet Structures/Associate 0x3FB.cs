@@ -35,7 +35,6 @@ namespace ConquerServer_v2.Packet_Structures
         private fixed sbyte Junk[10];
 #pragma warning restore
         private fixed sbyte szName[16];
-        public fixed byte TQServer[8]; 
         private fixed sbyte szAccount[16];
 
         // IAssociate
@@ -84,7 +83,6 @@ namespace ConquerServer_v2.Packet_Structures
             AssociatePacket retn = new AssociatePacket();
             retn.Size = 0x24;
             retn.Type = 0x3fb;
-            PacketBuilder.AppendTQServer(retn.TQServer, 8);
             return retn;
         }
     }

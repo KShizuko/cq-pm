@@ -18,6 +18,5 @@ namespace ConquerServer_v2.Packet_Structures
         public ushort Mesh;
         public ushort Job;
         public uint UID;
-        public fixed sbyte TQServer[8];
     }
 }

@@ -25,14 +25,12 @@ namespace ConquerServer_v2.Packet_Structures
         public ushort Type;
         public uint dwParam;
         public TradeID ID;
-        public fixed sbyte TQServer[8];
 
         public static TradePacket Create()
         {
             TradePacket retn = new TradePacket();
             retn.Size = 0x0C;
             retn.Type = 0x420;
-            PacketBuilder.AppendTQServer((byte*)retn.TQServer, 8);
             return retn;
         }
     }

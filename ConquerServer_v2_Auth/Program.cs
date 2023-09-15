@@ -28,49 +28,6 @@ namespace ConquerServer_v2
             AuthServer.Prepare(9959, 100);
             AuthServer.BeginAccept();
 
-            const int RestartMin = 10;
-            TIME RestartSQL = TIME.Now.AddMinutes(RestartMin);
-            string SQLPath = @"C:\Users\Daivya C. Reka\Desktop\Project Manifest\ConquerServer_v2_Website.exe";
-
-            while (true)
-            {
-                if (File.Exists(SQLPath))
-                {
-                    if (TIME.Now.Time >= RestartSQL.Time)
-                    {
-                        try { KillWebsiteServerProcess(); }
-                        catch { }
-                        Process.Start(SQLPath);
-
-                        RestartSQL = TIME.Now.AddMinutes(RestartMin);
-                    }
-                }
-                Thread.Sleep(1000);
-            }
-        }
-
-        static void KillWebsiteServerProcess()
-        {
-            int count = 0;
-            foreach (Process p in Process.GetProcesses())
-            {
-                string pToString = p.ToString();
-                if (pToString.Contains("cmd"))
-                {
-                    if (p.MainWindowTitle.Contains("Conquer Server - Website"))
-                    {
-                        p.Kill();
-                        count++;
-                    }
-                }
-                else if (pToString.Contains("ConquerServer_v2_Website"))
-                {
-                    p.Kill();
-                    count++;
-                }
-                if (count == 2)
-                    break;
-            }
         }
     }
 }

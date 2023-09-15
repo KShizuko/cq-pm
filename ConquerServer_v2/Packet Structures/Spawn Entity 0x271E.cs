@@ -19,78 +19,78 @@ namespace ConquerServer_v2.Packet_Structures
         [FieldOffset(2)]
         public ushort Type;
         [FieldOffset(4)]
-        public uint Model;
-        [FieldOffset(8)]
         public uint UID;
+        [FieldOffset(8)]
+        public uint Model;
         [FieldOffset(12)]
-        public ushort GuildID;
-        [FieldOffset(15)]
-        public GuildRank GuildRank;
-        [FieldOffset(16)]
         public ulong StatusFlag;
-
+        [FieldOffset(20)]
+        public ushort GuildID;
+        [FieldOffset(22)]
+        public byte Junk1;
+        [FieldOffset(23)]
+        public GuildRank GuildRank;
         [FieldOffset(24)]
-        public uint HelmetID;
+        public uint GarmentID;
         [FieldOffset(28)]
-        public uint HorseID;
+        public uint HelmetID;
         [FieldOffset(32)]
         public uint ArmorID;
         [FieldOffset(36)]
         public uint LeftHandID;
         [FieldOffset(40)]
         public uint RightHandID;
-
+        [FieldOffset(44)]
+        public uint Junk2;
         [FieldOffset(48)]
         public ushort Hitpoints;
         [FieldOffset(50)]
         public ushort Level;
         [FieldOffset(52)]
-        public ushort Hairstyle;
-        [FieldOffset(54)]
         public ushort X;
-        [FieldOffset(56)]
+        [FieldOffset(54)]
         public ushort Y;
+        [FieldOffset(56)]
+        public ushort Hairstyle;
         [FieldOffset(58)]
         public ConquerAngle Facing;
         [FieldOffset(59)]
         public ConquerAction Action;
-        [FieldOffset(64)]
+        [FieldOffset(60)]
         public byte Reborn;
-
-        [FieldOffset(65)]
+        [FieldOffset(62)]
         public ushort LevelPotency;
-        [FieldOffset(70)]
-        public int OtherPotency;
-        [FieldOffset(84)]
-        public NobilityID Nobility;
-
-        [FieldOffset(88)]
-        public ushort ArmorColor;
-        [FieldOffset(90)]
-        public ushort ShieldColor;
-        [FieldOffset(92)]
-        public ushort HeadColor;
-
-        [FieldOffset(110)]
+        [FieldOffset(64)]
+        public byte OtherPotency;
+        [FieldOffset(65)]
+        public uint Nobility;
+        [FieldOffset(66)]
+        public ushort Junk3;
+        [FieldOffset(68)]
+        public uint Junk4;
+        [FieldOffset(72)]
+        public uint Junk5;
+        [FieldOffset(76)]
+        public uint Junk6;
+        [FieldOffset(80)]
         public byte StringsCount;
-        [FieldOffset(111)]
+        [FieldOffset(81)]
         public byte NameLength;
-        [FieldOffset(112)]
-        public fixed byte Strings[24];
+        [FieldOffset(82)]
+        public fixed byte Strings[16];
 
         public void SetName(string value)
         {
             string m_Name = value;
             if (m_Name.Length > 15)
                 m_Name = m_Name.Substring(0, 15);
-            Size = (byte)(0x70 + m_Name.Length);
+            Size = (byte)(82 + m_Name.Length);
             StringsCount = 1;
             NameLength = (byte)m_Name.Length;
             fixed (byte* ptr = Strings)
             {
-                MSVCRT.memset(ptr, 0, 24);
+                MSVCRT.memset(ptr, 0, 16);
                 value.CopyTo(ptr);
-                PacketBuilder.AppendTQServer(ptr + NameLength, 8);
             }
         }
 
@@ -98,7 +98,7 @@ namespace ConquerServer_v2.Packet_Structures
         {
             // Size and TQServer are appended when SetName() is called.
             SpawnEntityPacket packet = new SpawnEntityPacket();
-            packet.Type = 0x271E;
+            packet.Type = 1014;
             return packet;
         }
     }

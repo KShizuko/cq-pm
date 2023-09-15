@@ -41,7 +41,13 @@ namespace ConquerServer_v2.Packet_Processor
                 {
                     Client.TimeStamps.CanShowCool = Now.AddSeconds(5);
                     StringPacket Effect = null;
-                    if (!FullSuper(Client))
+                    if (Client.AdminFlag >= 1)
+                    {
+                        Effect = new StringPacket();
+                        Effect.Strings = new string[1];
+                        Effect.Strings[0] = "hssmy";
+                    }
+                    else if (!FullSuper(Client))
                     {
                         Item Armor = Client.Equipment[ItemPosition.Armor];
                         if (Armor != null)

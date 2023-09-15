@@ -17,31 +17,26 @@ namespace ConquerServer_v2.Packet_Structures
         Experience = 5,
         PKPoints = 6,
         Job = 7,
-        Stamina = 8,
-        StatPoints = 10,
-        Model = 11,
-        Level = 12,
-        Spirit = 13,
-        Vitality = 14,
-        Strength = 15,
-        Agility = 16,
-        HeavensBlessing = 17,
-        DoubleExpTimer = 18,
-        // ? ?
-        CursedTimer = 20,
-        RebornCount = 22,
-        // ? ?
-        RaiseFlag = 25,
-        Hairstyle = 26,
-        XPCircle = 27,
-        LuckyTimeTimer = 28,
-        ConquerPoints = 29,
-        MentorBattlePower = 36,
-        // ? ? ? ?
-        QuizShowPoints = 40
+        Stamina = 9,
+        StatPoints = 11,
+        Model = 12,
+        Level = 13,
+        Spirit = 14,
+        Vitality = 15,
+        Strength = 16,
+        Agility = 17,
+        HeavensBlessing = 18,
+        DoubleExpTimer = 19,
+        CursedTimer = 21,
+        RebornCount = 32,
+        RaiseFlag = 26,
+        Hairstyle = 27,
+        XPCircle = 31,
+        LuckyTimeTimer = 29,
+        ConquerPoints = 30,
     }
 
-    [StructLayout(LayoutKind.Explicit, Size = 0x24 + 8)]
+    [StructLayout(LayoutKind.Explicit, Size = 0x24)]
     public unsafe struct UpdatePacket
     {
         [FieldOffset(0)]
@@ -62,16 +57,13 @@ namespace ConquerServer_v2.Packet_Structures
         public ulong BigValue;
         [FieldOffset(24)]
         public fixed uint Pad[3];
-        [FieldOffset(36)]
-        private fixed byte TQServer[8];
 
         public static UpdatePacket Create()
         {
             UpdatePacket retn = new UpdatePacket();
             retn.Size = 0x24;
-            retn.Type = 0x2721;
+            retn.Type = 1017;
             retn.TotalUpdates = 1;
-            PacketBuilder.AppendTQServer(retn.TQServer, 8);
             return retn;
         }
     }
@@ -88,7 +80,7 @@ namespace ConquerServer_v2.Packet_Structures
         }
 
         const int SizeOf_Data = 12;
-        [StructLayout(LayoutKind.Explicit, Size=SizeOf_Data)]
+        [StructLayout(LayoutKind.Explicit, Size = SizeOf_Data)]
         public struct Data
         {
             [FieldOffset(0)]
@@ -139,14 +131,13 @@ namespace ConquerServer_v2.Packet_Structures
 
         public BigUpdatePacket(uint TotalUpdates)
         {
-            Buffer = new byte[12 + (TotalUpdates * SizeOf_Data) + 8];
+            Buffer = new byte[12 + (TotalUpdates * SizeOf_Data)];
             fixed (byte* _iUpdate = Buffer)
             {
                 internalUpdate* iUpdate = (internalUpdate*)_iUpdate;
-                iUpdate->Size = (ushort)(Buffer.Length - 8);
-                iUpdate->Type = 0x2721;
+                iUpdate->Size = (ushort)(Buffer.Length);
+                iUpdate->Type = 1017;
                 iUpdate->UpdateCount = TotalUpdates;
-                PacketBuilder.AppendTQServer((byte*)iUpdate, (ushort)Buffer.Length);
             }
         }
         public uint UID

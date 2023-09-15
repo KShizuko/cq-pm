@@ -18,23 +18,21 @@ namespace ConquerServer_v2.Packet_Structures
 
     public unsafe struct GuildInfoPacket
     {
-        public ushort Size;
-        public ushort Type;
-        public uint ID;
-        public uint Donation;
-        public uint Fund;
-        public uint MemberCount;
-        public GuildRank Rank;
-        public fixed sbyte Leader[16];
-        public fixed sbyte Junk[3];
-        public fixed byte TQServer[8];
+        public ushort Size; //0
+        public ushort Type; //2
+        public uint ID; ///4
+        public uint Donation; //8
+        public uint Fund; //12
+        public uint MemberCount; //16
+        public GuildRank Rank; //20
+        public fixed sbyte Leader[16]; //21
+        public fixed sbyte Junk[3]; //37
 
         public static GuildInfoPacket Create()
         {
             GuildInfoPacket retn = new GuildInfoPacket();
             retn.Size = 0x28;
             retn.Type = 0x452;
-            PacketBuilder.AppendTQServer(retn.TQServer, 8);
             return retn;
         }
     }

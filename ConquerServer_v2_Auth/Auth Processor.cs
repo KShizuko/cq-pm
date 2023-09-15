@@ -40,7 +40,7 @@ namespace ConquerServer_v2
                                 int PermanentBan = ServerDatabase.PermanentBan(Client.Account);
                                 AuthResponsePacket resp = AuthResponsePacket.Create();
 
-                                if (PermanentBan == 2 && pReceived[131] == 0xFF)
+                                if (PermanentBan == 2)
                                 {
                                     ServerDatabase.AddFullPermanentBan(Client.Account);
                                 }

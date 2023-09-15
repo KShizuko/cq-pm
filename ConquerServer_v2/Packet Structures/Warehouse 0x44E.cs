@@ -12,7 +12,7 @@ namespace ConquerServer_v2.Packet_Structures
         Show = 0xA00,
         DepositItem = 0xA01,
         WithdrawItem = 0xA02
-    } 
+    }
 
     [StructLayout(LayoutKind.Sequential)]
     /// <summary>
@@ -30,18 +30,17 @@ namespace ConquerServer_v2.Packet_Structures
 
         public static SafePointer Create(int Count)
         {
-            int Size = 16 + (sizeof(WarehouseItem) * Count) + 8;
+            int Size = 16 + (sizeof(WarehouseItem) * Count);
             SafePointer SafePtr = new SafePointer(Size);
             WarehousePacket* ptr = (WarehousePacket*)SafePtr.Addr;
-            ptr->Size = (ushort)(Size - 8);
+            ptr->Size = (ushort)Size;
             ptr->Type = 0x44E;
             ptr->Count = Count;
-            PacketBuilder.AppendTQServer(SafePtr.Addr, Size);
             return SafePtr;
         }
     }
 
-    [StructLayout(LayoutKind.Explicit, Size=24)]
+    [StructLayout(LayoutKind.Explicit, Size = 24)]
     /// <summary>
     /// An internal structure of the 0x44E packet (Server->Client)
     /// </summary>
@@ -62,13 +61,9 @@ namespace ConquerServer_v2.Packet_Structures
         [FieldOffset(14)]
         public byte Bless;
         [FieldOffset(15)]
-        public bool Free;
-        [FieldOffset(16)]
         public byte Enchant;
-        [FieldOffset(17)]
+        [FieldOffset(16)]
         public fixed byte bUnknowns[5];
-        [FieldOffset(23)]
-        public byte Color;
 
         public Item ToItem()
         {
@@ -79,8 +74,6 @@ namespace ConquerServer_v2.Packet_Structures
             retn.Plus = Plus;
             retn.Bless = Bless;
             retn.Enchant = Enchant;
-            retn.Color = (byte)Color;
-            retn.Free = Free;
             return retn;
         }
         public static WarehouseItem Create(Item Base)
@@ -93,8 +86,6 @@ namespace ConquerServer_v2.Packet_Structures
             retn.Plus = Base.Plus;
             retn.Bless = Base.Bless;
             retn.Enchant = Base.Enchant;
-            retn.Color = Base.Color;
-            retn.Free = Base.Free;
             return retn;
         }
     }

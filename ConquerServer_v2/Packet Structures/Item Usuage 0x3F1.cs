@@ -31,8 +31,8 @@ namespace ConquerServer_v2.Packet_Structures
         UpdateEnchant = 0x1C,
         AddVendingItemConquerPts = 0x1D,
         UpdatePurity = 0x23,
-        DropItem = 0x25,
-        DropGold = 0x26
+        DropItem = 0x03,
+        DropGold = 0x0C
     }
 
     /// <summary>
@@ -40,23 +40,20 @@ namespace ConquerServer_v2.Packet_Structures
     /// </summary>
     public unsafe struct ItemUsuagePacket
     {
-        public ushort Size;
-        public ushort Type;
-        public uint UID;
-        public uint dwParam1;
-        public ItemUsuageID ID;
-        public TIME TimeStamp;
-        public uint dwParam2;
-        public uint dwParam3;
-        public fixed sbyte TQServer[8];
+        public ushort Size; //0
+        public ushort Type; //2
+        public uint UID; //4
+        public uint dwParam1; //8
+        public ItemUsuageID ID; //12
+        public TIME TimeStamp; //16
+        public uint dwParam2; //20
 
         public static ItemUsuagePacket Create()
         {
             ItemUsuagePacket retn = new ItemUsuagePacket();
-            retn.Size = 0x1C;
+            retn.Size = 24;
             retn.Type = 0x3F1;
             retn.TimeStamp = WinMM.timeGetTime();
-            PacketBuilder.AppendTQServer((byte*)retn.TQServer, 8);
             return retn;
         }
     }

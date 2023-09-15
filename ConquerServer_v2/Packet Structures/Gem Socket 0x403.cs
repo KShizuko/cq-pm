@@ -14,6 +14,5 @@ namespace ConquerServer_v2.Packet_Structures
         public uint GemItemUID;
         public ushort SocketNumber;
         public ushort wPadding;
-        public fixed sbyte TQServer[8];
     }
 }

@@ -96,10 +96,10 @@ namespace ConquerServer_v2.Packet_Structures
         }
         public static implicit operator byte[](MessagePacket Msg)
         {
-            byte[] Buffer = new byte[32 + 8 + Msg.Message.Length + Msg.From.Length + Msg.To.Length];
+            byte[] Buffer = new byte[32 + Msg.Message.Length + Msg.From.Length + Msg.To.Length];
             fixed (byte* Packet = Buffer)
             {
-                *((ushort*)(Packet)) = (ushort)(Buffer.Length - 8);
+                *((ushort*)(Packet)) = (ushort)Buffer.Length;
                 *((ushort*)(Packet + 2)) = 0x3EC;
                 *((uint*)(Packet + 4)) = Msg.Color;
                 *((ChatID*)(Packet + 8)) = Msg.ChatType;
@@ -114,7 +114,6 @@ namespace ConquerServer_v2.Packet_Structures
                 Msg.From.CopyTo(Packet + 26);
                 Msg.To.CopyTo(Packet + 27 + Msg.From.Length);
                 Msg.Message.CopyTo(Packet + 29 + Msg.From.Length + Msg.To.Length);
-                PacketBuilder.AppendTQServer(Packet, (ushort)Buffer.Length);
             }
             return Buffer;
         }

@@ -83,8 +83,6 @@ namespace ConquerServer_v2
                     break;
             }
 
-            NobilityScoreBoard.QueryRanks();
-
             CanJoin = false;
             CanFight = false;
             Active = false;

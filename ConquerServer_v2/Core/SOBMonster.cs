@@ -79,7 +79,6 @@ namespace ConquerServer_v2.GuildWar
                 {
                     MSVCRT.memset(lpStrings, 0, 24);
                     m_Name.CopyTo(lpStrings);
-                    PacketBuilder.AppendTQServer((byte*)lpStrings + Spawn.NameLength + 1, 8);
                 }
                 Spawn.Size = (ushort)(0x1C + Spawn.NameLength + 1);
             }

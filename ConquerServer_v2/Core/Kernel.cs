@@ -121,7 +121,7 @@ namespace ConquerServer_v2.Core
         public static byte[] ToBytes(void* PacketPtr)
         {
             ushort Size = *((ushort*)PacketPtr);
-            byte[] Bytes = new byte[Size + 8];
+            byte[] Bytes = new byte[Size];
             fixed (byte* dst = Bytes)
             {
                 MSVCRT.memcpy(dst, PacketPtr, Bytes.Length);

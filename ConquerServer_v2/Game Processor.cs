@@ -17,7 +17,6 @@ namespace ConquerServer_v2
         {
             GameClient Client = new GameClient(nClient);
             nClient.Owner = Client;
-            Client.Send(Client.Crypto.CreateHandShake());
         }
 
         public unsafe static void Game_Disconnect(NetworkClient nClient)
@@ -81,36 +80,32 @@ namespace ConquerServer_v2
                     return;
                 }
 
-                if ((Client.ServerFlags & ServerFlags.DHExchanged) == ServerFlags.DHExchanged)
+                fixed (byte* lpPacket = Packet)
                 {
-                    fixed (byte* lpPacket = Packet)
+                    int Counter = 0;
+                    byte[] InitialPacket = null;
+                    while (Counter < Packet.Length)
                     {
-                        int Counter = 0;
-                        byte[] InitialPacket = null;
-                        while (Counter < Packet.Length)
+                        ushort Size = (ushort)(*((ushort*)(lpPacket + Counter)));
+                        ushort Type = *((ushort*)(lpPacket + Counter + 2));
+                        if (Size < Packet.Length)
                         {
-                            ushort Size = (ushort)(*((ushort*)(lpPacket + Counter)) + 8);
-                            ushort Type = *((ushort*)(lpPacket + Counter + 2));
-                            if (Size < Packet.Length)
+                            InitialPacket = new byte[Size];
+                            fixed (byte* lpInitialPacket = InitialPacket)
                             {
-                                InitialPacket = new byte[Size];
-                                fixed (byte* lpInitialPacket = InitialPacket)
-                                {
-                                    MSVCRT.memcpy(lpInitialPacket, lpPacket + Counter, Size);
-                                    PacketBuilder.AppendTQServer(lpInitialPacket, InitialPacket.Length);
-                                    PacketProcessor.Process(Client, lpInitialPacket, InitialPacket, Type);
-                                }
+                                MSVCRT.memcpy(lpInitialPacket, lpPacket + Counter, Size);
+                                PacketProcessor.Process(Client, lpInitialPacket, InitialPacket, Type);
                             }
-                            else if (Size > Packet.Length)
-                            {
-                                nClient.Disconnect();
-                                break;
-                            }
-                            else
-                            {
-                                PacketBuilder.AppendTQServer(lpPacket, Packet.Length);
-                                PacketProcessor.Process(Client, lpPacket, Packet, Type);
-                            }
+                        }
+                        else if (Size > Packet.Length)
+                        {
+                            nClient.Disconnect();
+                            break;
+                        }
+                        else
+                        {
+                            PacketProcessor.Process(Client, lpPacket, Packet, Type);
+                        }
 #if LOG_PACKETS
                         bool OKDump = true;
                         if (Type == 0x3f1)
@@ -121,13 +116,8 @@ namespace ConquerServer_v2
                         if (OKDump)
                             Console.WriteLine(Dump((InitialPacket == null) ? Packet : InitialPacket));
 #endif
-                            Counter += Size;
-                        }
+                        Counter += Size;
                     }
-                }
-                else
-                {
-                    PacketProcessor.AppendBlowfishLanguage(Client, Packet);
                 }
             }
         }

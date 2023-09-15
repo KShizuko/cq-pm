@@ -39,7 +39,7 @@ namespace ConquerServer_v2.Database
                     }
                 default:
                     {
-                        if (itemtype == ItemTypeConst.BackswordID || itemtype == ItemTypeConst.NinjaSwordID)
+                        if (itemtype == ItemTypeConst.BackswordID)
                         {
                             ID = (uint)(
                                 ID - (ID % 10) // [5] = 0

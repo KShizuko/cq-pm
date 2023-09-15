@@ -32,37 +32,6 @@ namespace ConquerServer_v2.Packet_Processor
                         Client.NetworkSocket.Disconnect();
                         return;
                     }
-#if PROTECTION_SPEEDHACK
-                    else
-                    {
-                        if (Client.TimeStamps.LastClientJump.Time >= Packet->TimeStamp.Time)
-                        {
-                            Client.Send(MessageConst.SPEED_HACK);
-                            return;
-                        }
-                        if ((Client.Entity.StatusFlag & StatusFlag.Cyclone) != StatusFlag.Cyclone &&
-                            !Client.InTransformation)
-                        {
-                            if (Packet->TimeStamp.Time - Client.TimeStamps.LastClientJump.Time <= 500)
-                            {
-                                Client.Send(MessageConst.SPEED_HACK);
-                                Client.Pullback();
-                                return;
-                            }
-                            else
-                            {
-                                if (TIME.Now.Time - Client.TimeStamps.LastServerJump.Time <= 300)
-                                {
-                                    Client.Send(MessageConst.SPEED_HACK);
-                                    Client.Pullback();
-                                    return;
-                                }
-                            }
-                        }
-                        Client.TimeStamps.LastClientJump = Packet->TimeStamp;
-                        Client.TimeStamps.LastServerJump = TIME.Now;
-                    }
-#endif
                     if (Client.Entity.MapID == MapID.GuildWar)
                     {
                         if (!GuildWarKernel.ValidJump(Client.TileColor, out Client.TileColor, Packet->dwParam_Lo, Packet->dwParam_Hi))

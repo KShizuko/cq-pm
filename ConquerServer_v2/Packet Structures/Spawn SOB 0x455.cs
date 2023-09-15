@@ -36,14 +36,13 @@ namespace ConquerServer_v2.Packet_Structures
         public ushort Facing;
         public bool ShowName;
         public byte NameLength;
-        public fixed byte Strings[24];
+        public fixed byte Strings[16];
 
         public static SpawnSOBPacket Create()
         {
             SpawnSOBPacket Data = new SpawnSOBPacket();
             Data.Size = 0x1C;
-            Data.Type = 0x455;  
-            PacketBuilder.AppendTQServer(Data.Strings, 8);
+            Data.Type = 0x455;
             return Data;
         }
     }

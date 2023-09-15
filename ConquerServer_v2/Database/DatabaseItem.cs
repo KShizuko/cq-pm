@@ -19,8 +19,6 @@ namespace ConquerServer_v2.Database
         public byte Enchant;
         public byte SocketOne;
         public byte SocketTwo;
-        public byte Color;
-        public int ComposeProgress;
         public short Durability;
         public short Arrows { get { return Durability; } set { Durability = value; } }
         public short MaxDurability;
@@ -36,8 +34,6 @@ namespace ConquerServer_v2.Database
             Enchant = item.Enchant;
             SocketOne = item.SocketOne;
             SocketTwo = item.SocketTwo;
-            Color = item.Color;
-            ComposeProgress = item.ComposeProgress;
             Durability = item.Durability;
             MaxDurability = item.MaxDurability;
         }
@@ -59,8 +55,6 @@ namespace ConquerServer_v2.Database
             item.RebornEffects = RebornEffects;
             item.SocketOne = SocketOne;
             item.SocketTwo = SocketTwo;
-            item.Color = Color;
-            item.ComposeProgress = ComposeProgress;
             item.Durability = Durability;
             item.MaxDurability = MaxDurability;
             return item;

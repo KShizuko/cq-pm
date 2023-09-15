@@ -224,6 +224,10 @@ namespace ConquerServer_v2
             string item_file = Engine.BuildPath + @"items\" + Item.ID.ToString() + ".vb";
             switch (Item.ID)
             {
+                case 723700: //expball
+                    {
+                        break;
+                    }
                 default:
                     {
                         string processfile = ServerDatabase.Path + @"\Scripts\items\process.vb";
@@ -251,7 +255,7 @@ namespace ConquerServer_v2
         }
         public static int Dialog(INpcPlayer Player, string[] Dlg)
         {
-            const int BaseSize = 0x11 + 8;
+            const int BaseSize = 0x11;
             byte* ptr = stackalloc byte[BaseSize];
             int string_size = 0;
             NpcClickPacket* Reply;

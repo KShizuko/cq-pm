@@ -17,7 +17,6 @@ namespace ConquerServer_v2.Packet_Structures
         public int Hour;
         public int Minute;
         public int Seconds;
-        public fixed byte TQServer[8];
 
         private void Format()
         {
@@ -36,7 +35,6 @@ namespace ConquerServer_v2.Packet_Structures
             retn.Size = 0x24;
             retn.Type = 0x409;
             retn.Format();
-            PacketBuilder.AppendTQServer(retn.TQServer, 8);
             return retn;
         }
     }

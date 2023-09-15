@@ -18,14 +18,12 @@ namespace ConquerServer_v2.Packet_Structures
 #pragma warning disable
         private byte _GuildRank;
 #pragma warning restore
-        public fixed byte TQServer[8];
 
         public static GuildMemberInfoPacket Create()
         {
             GuildMemberInfoPacket retn = new GuildMemberInfoPacket();
             retn.Size = 0x1C;
             retn.Type = 0x458;
-            PacketBuilder.AppendTQServer(retn.TQServer, 8);
             return retn;
         }
     }

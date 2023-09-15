@@ -20,8 +20,6 @@ namespace ConquerServer_v2.Packet_Structures
         Bottle = 7,
         Boots = 8,
         Garment = 9,
-        AttackTalisman = 10,
-        DefenceTalisman = 11
     }
 
     public enum ItemMode : ushort
@@ -39,32 +37,22 @@ namespace ConquerServer_v2.Packet_Structures
     /// </summary>
     public unsafe struct ItemPacket
     {
-        public ushort Size;
-        public ushort Type;
-        public uint UID;
-        public uint ID;
-        public short Amount;
-        public short MaxAmount;
-        public ItemMode Mode;
-        public ItemPosition Position;
-        public ushort wUnknown;
-        public short RebornEffect;
-        public byte SocketOne;
-        public byte SocketTwo;
-        public ushort wUnknown2;
-        public byte Plus;
-        public byte Bless;   
-        public bool Free;
-        public byte Enchant;
-        public byte wUnknown3;
-        public byte wUnknown4;
-        public byte wUnknown5;
-        public byte wUnknown6;
-        public ushort Suspicious;
-        public ushort Locked;
-        public byte Color;
-        public int ComposeProgress;
-        public fixed byte TQServer[8];
+        public ushort Size; //0
+        public ushort Type; //2
+        public uint UID; //4
+        public uint ID; //8
+        public short Amount; //12
+        public short MaxAmount; //14
+        public ItemMode Mode; //16
+        public ItemPosition Position; //18
+        public ushort wUnknown; //20
+        public short RebornEffect; //22
+        public byte SocketOne; //24
+        public byte SocketTwo; //25
+        public ushort wUnknown2; //26
+        public byte Plus; //28
+        public byte Bless; //29
+        public byte Enchant; //30
 
         /// <summary>
         /// Creates a new item instance, pre-intializes with these fields:
@@ -75,11 +63,9 @@ namespace ConquerServer_v2.Packet_Structures
         public static ItemPacket Create()
         {
             ItemPacket packet = new ItemPacket();
-            packet.Size = 0x30;
+            packet.Size = 32;
             packet.Type = 0x3f0;
             packet.Mode = ItemMode.Default;
-            packet.Color = 3;
-            PacketBuilder.AppendTQServer(packet.TQServer, 8);
             return packet;
         }
     }

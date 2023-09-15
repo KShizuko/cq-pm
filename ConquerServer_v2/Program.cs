@@ -68,6 +68,11 @@ namespace ConquerServer_v2
                 Commands[0] = Commands[0].ToLower();
                 switch (Commands[0])
                 {
+                    case "/account":
+                        {
+                            ServerDatabase.NewUsername(Commands[1], Commands[2]);
+                            break;
+                        }
                     case "/help":
                         {
                             Console.WriteLine("/debug - Monitor thread usuage.");

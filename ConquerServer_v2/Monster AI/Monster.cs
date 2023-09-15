@@ -128,7 +128,7 @@ namespace ConquerServer_v2.Monster_AI
 
                                         MovementPacket Packet = MovementPacket.Create();
                                         Packet.Running = 0;
-                                        Packet.Direction = (int)this.Entity.Facing;
+                                        Packet.Direction = (byte)this.Entity.Facing;
                                         Packet.UID = this.Entity.UID;
                                         SendRangePacket.Add(this.Entity, Kernel.ViewDistance, 0, Kernel.ToBytes(&Packet), null);
                                     }
@@ -270,7 +270,7 @@ namespace ConquerServer_v2.Monster_AI
 
                                 MovementPacket Packet = MovementPacket.Create();
                                 Packet.Running = 1;
-                                Packet.Direction = (int)this.Entity.Facing;
+                                Packet.Direction = (byte)this.Entity.Facing;
                                 Packet.UID = this.Entity.UID;
                                 SendRangePacket.Add(this.Entity, Kernel.ViewDistance, 0, Kernel.ToBytes(&Packet), null);
                             }

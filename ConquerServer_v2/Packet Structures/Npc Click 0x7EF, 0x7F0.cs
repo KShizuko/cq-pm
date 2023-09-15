@@ -64,7 +64,6 @@ namespace ConquerServer_v2.Packet_Structures
             packet->OptionID = 0xFF;
             packet->DontDisplay = true;
             packet->InputLength = (byte)TextLength;
-            PacketBuilder.AppendTQServer((byte*)Ptr, packet->Size + 8);
             return packet;
         }
     }

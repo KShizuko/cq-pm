@@ -12,30 +12,35 @@ namespace ConquerServer_v2.Packet_Processor
 {
     public unsafe partial class PacketProcessor
     {
-        private static int[] ComposeTable = { 20, 20, 80, 240, 720, 2160, 6480, 19440, 58320, 2700, 5500, 9000 };
-        private static int[] ComposeTableAdd = { 0, 10, 40, 120, 360, 1080, 3240, 9720, 29160 };
         public static void ComposeItems(GameClient Client, ComposeItemPacket* Packet)
         {
-            byte minorslot;
+            byte minorslot1;
+            byte minorslot2;
+            byte gem1;
+            byte gem2;
+
             Item main = Client.Inventory.Search(Packet->MainItem);
-            Item minor = Client.Inventory.Search(Packet->MinorItem, out minorslot);
-            if (main != null && minor != null)
+            Item minor1 = Client.Inventory.Search(Packet->MinorItem1, out minorslot1);
+            Item minor2 = Client.Inventory.Search(Packet->MinorItem2, out minorslot2);
+            Item gemf = Client.Inventory.Search(Packet->Gem1, out gem1);
+            Item gems = Client.Inventory.Search(Packet->Gem2, out gem2);
+
+            if (main != null && minor1 != null && minor2 != null)
             {
                 if (main.Plus < Item.MaxPlus)
                 {
-                    int needed = ComposeTable[main.Plus];
-                    int plus = minor.Plus;
-                    main.ComposeProgress += ComposeTableAdd[plus];
-                    while (main.ComposeProgress >= needed)
-                    {
-                        main.ComposeProgress -= needed;
-                        main.Plus += 1;
-                        if (main.Plus >= Item.MaxPlus)
-                            break;
-                        needed = ComposeTable[main.Plus];
-                    }
+                    main.Plus += 1;
                     main.SendInventoryUpdate(Client);
-                    Client.Inventory.RemoveBySlot(minorslot);
+                    Client.Inventory.RemoveBySlot(minorslot1);
+                    Client.Inventory.RemoveBySlot(minorslot2);
+                    if (gemf != null)
+                    {
+                        Client.Inventory.RemoveBySlot(gem1);
+                        if (gems != null)
+                        {
+                            Client.Inventory.RemoveBySlot(gem2);
+                        }
+                    }
                 }
             }
         }

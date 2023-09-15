@@ -15,7 +15,6 @@ namespace ConquerScriptLinker
         byte SocketOne { get; set; }
         byte SocketTwo { get; set; }
         short RebornEffects { get; set; }
-        byte Color { get; set; }
         ushort CurrentPosition { get; set; }
         void Send(INpcPlayer Player);
         ushort GetItemType();

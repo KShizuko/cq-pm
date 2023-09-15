@@ -10,13 +10,13 @@ namespace ConquerServer_v2.Packet_Structures
     /// </summary>
     public unsafe struct LoginPacket
     {
-        public const ushort cSize = 0x114;
-        public const ushort cType = 0x43E;
+        public const ushort cSize = 52;
+        public const ushort cType = 1051;
 
         public ushort Size;
         public ushort Type;
-        public fixed sbyte szUser[128];
-        public fixed uint szPassword[32];
+        public fixed sbyte szUser[16];
+        public fixed uint szPassword[16];
         public fixed sbyte szServer[16];
 
         public string User { get { fixed (sbyte* ptr = szUser) { return new string(ptr); } } }

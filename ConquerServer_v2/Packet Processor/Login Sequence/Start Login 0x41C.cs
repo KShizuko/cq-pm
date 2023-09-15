@@ -22,6 +22,7 @@ namespace ConquerServer_v2.Packet_Processor
                 existingClient.NetworkSocket.Disconnect();
                 Program.Game_Disconnect(existingClient.NetworkSocket);
             }
+            Client.Crypto.SetKeys(*((uint*)(Ptr + 8)), *((uint*)(Ptr + 4)));
             if (ServerDatabase.LoadPlayer(Client, PasswordCheckSum, out New))
             {
                 if (Client.BannedFlag == 2 || Client.BannedFlag == 3) // Permanent

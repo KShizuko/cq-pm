@@ -24,11 +24,11 @@ namespace ConquerServer_v2.Client
                 if (value != null)
                 {
                     value.Position = Position;
-                    SetSlot(Position, value.ID, value.Color);
+                    SetSlot(Position, value.ID);
                 }
                 else
                 {
-                    SetSlot(Position, 0, 0);
+                    SetSlot(Position, 0);
                 }
                 Items[((ushort)Position) - 1] = value;
             }
@@ -44,7 +44,7 @@ namespace ConquerServer_v2.Client
             Item.Position = Slot;
             ServerDatabase.LoadItemStats(Client, Item);
             this[Slot] = Item;
-            SetSlot(Slot, Item.ID, Item.Color);
+            SetSlot(Slot, Item.ID);
         }
         [Obsolete("Use GameClient.Unequip() instead of calling this function directly.")]
         /// <summary>
@@ -58,7 +58,7 @@ namespace ConquerServer_v2.Client
             {
                 ServerDatabase.UnloadItemStats(Client, old);
                 this[Slot] = null;
-                SetSlot(Slot, 0, 0);
+                SetSlot(Slot, 0);
             }
             return old;
         }
@@ -71,49 +71,31 @@ namespace ConquerServer_v2.Client
             {
                 if (Equipment != null)
                 {
-                    SetSlot(Equipment.Position, Equipment.ID, Equipment.Color);
+                    SetSlot(Equipment.Position, Equipment.ID);
                 }
             }
         }
-        public void SetSlot(ItemPosition ItemSlot, uint ID, byte Color)
+        public void SetSlot(ItemPosition ItemSlot, uint ID)
         {
             switch (ItemSlot)
             {
                 case ItemPosition.Garment:
                     {
                         Client.Entity.Spawn.ArmorID = ID; 
-                        Client.Entity.Spawn.ArmorColor = Color;
                         if (ID == 0)
                         {
                             Item item = this[ItemPosition.Armor];
                             if (item != null)
                             {
                                 Client.Entity.Spawn.ArmorID = item.ID;
-                                Client.Entity.Spawn.ArmorColor = item.Color;
                             }
                         }
                         break;
                     }
-                case ItemPosition.Head:
-                    {
-                        Client.Entity.Spawn.HelmetID = ID;
-                        Client.Entity.Spawn.HeadColor = Color;
-                        break;
-                    }
-                case ItemPosition.Armor:
-                    {
-                        Client.Entity.Spawn.ArmorID = ID; 
-                        Client.Entity.Spawn.ArmorColor = Color;
-                        break;
-                    }
+                case ItemPosition.Head: Client.Entity.Spawn.HelmetID = ID; break;
+                case ItemPosition.Armor: Client.Entity.Spawn.ArmorID = ID; break;
                 case ItemPosition.Right: Client.Entity.Spawn.RightHandID = ID; break;
-                case ItemPosition.Left: 
-                    {
-                        Client.Entity.Spawn.LeftHandID = ID;
-                        if ((int)(ID / 1000) == ItemTypeConst.ShieldID)
-                            Client.Entity.Spawn.ShieldColor = Color;
-                        break;
-                    }
+                case ItemPosition.Left: Client.Entity.Spawn.LeftHandID = ID; break;
             }
         }
     }

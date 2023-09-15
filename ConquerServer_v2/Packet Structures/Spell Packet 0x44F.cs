@@ -17,13 +17,12 @@ namespace ConquerServer_v2.Packet_Structures
         public int Experience;
         public ushort ID;
         public ushort Level;
-        public fixed byte TQServer[8];
+
         public static SpellPacket Create()
         {
             SpellPacket packet = new SpellPacket();
             packet.Size = 0x0C;
             packet.Type = 0x44F;
-            PacketBuilder.AppendTQServer(packet.TQServer, 8);
             return packet;
         }
     }

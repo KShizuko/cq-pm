@@ -39,18 +39,6 @@ namespace ConquerServer_v2.Packet_Processor
                 big.Append(2, UpdateID.Stamina, Client.Stamina);
                 big.Append(3, UpdateID.RaiseFlag, Client.Entity.StatusFlag);
                 Client.Send(big);
-
-                if (Client.Entity.Level >= 70)
-                {
-                    NobilityRankPacket nobility = new NobilityRankPacket();
-                    nobility.Type = NobilityRankType.Icon;
-                    nobility.Value = Client.Entity.UID;
-                    nobility.SingleRank = NobilityScoreBoard.ObtainNobility(Client);
-                    
-                    Client.Entity.Nobility = nobility.SingleRank.Rank; 
-                    Client.Send(nobility);
-                }
-
                 Client.DisplayStats();
             }
         }

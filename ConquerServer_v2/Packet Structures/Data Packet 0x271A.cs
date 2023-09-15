@@ -7,42 +7,43 @@ namespace ConquerServer_v2.Packet_Structures
 {
     public enum DataID : ushort
     {
-        NinjaStep = 0x9C,
-        EndFly = 0x78,
-        GUIDialog = 0x7E,
-        SetLocation = 0x4A,
-        SetMapColor = 0x68,
-        Jump = 0x89,
-        UnlearnSpell = 0x6D,
-        UnlearnProficiency = 0x6E,
-        GuardJump = 0x82,
-        LevelUp = 0x5C,
-        FriendInfo = 0x8C,
-        Teleport = 0x56,
-        GetSurroundings = 0x72,
-        RemoveEntity = 0x87,
-        RequestTeamPosition = 0x6A,
-        ChangePkMode = 0x60,
-        Revive = 0x5E,
-        RequestEntity = 0x66,
-        ChangeAction = 0x51,
-        ChangeDirection = 0x4F,
-        Hotkeys = 0x4B,
-        ConfirmAssociates = 0x4C,
-        ConfirmProficiencies = 0x4D,
-        ConfirmSpells = 0x4E,
-        ConfirmGuild = 0x61,
-        Login = 0x84,
-        ChangeAvatar = 0x97,
-        EnterPortal = 0x55,
-        DeleteCharacter = 0x5F,
-        Switch = 0x74,
-        RequestFriendInfo = 0x94,
-        EndTransform = 0x76,
-        Mining = 0x63,
-        StartVend = 0x6F,
-        SpawnEffect = 0x86,
-        None = 0x00
+        None = 0,
+        SetLocation = 74,
+        Hotkeys = 75,
+        ConfirmAssociates = 76,
+        ConfirmProficiencies = 77,
+        ConfirmSpells = 78,
+        ChangeDirection = 79,
+        ChangeAction = 81,
+        EnterPortal = 85,
+        Teleport = 86,
+        LevelUp = 92,
+        EndXpList = 93,
+        Revive = 94,
+        DeleteCharacter = 95,
+        ChangePkMode = 96,
+        ConfirmGuild = 97,
+        Mining = 99,
+        RequestEntity = 102,
+        SetMapColor = 104,
+        RequestTeamPosition = 106,
+        CorrectCoords = 108,
+        UnlearnSpell = 109,
+        UnlearnProficiency = 110,
+        StartVend = 111,
+        GetSurroundings = 114,
+        Switch = 116,
+        EndTransform = 118,
+        EndFly = 120,
+        PickupCashEffect = 121,
+        GUIDialog = 126,
+        GuardJump = 129,
+        Login = 130,
+        SpawnEffect = 131,
+        RemoveEntity = 132,
+        Jump = 133,
+        ChangeAvatar = 142,
+        RequestFriendInfo = 150
     }
 
     public class DataSwitchArg
@@ -64,36 +65,32 @@ namespace ConquerServer_v2.Packet_Structures
     /// </summary>
     public unsafe struct DataPacket
     {
-        public ushort Size;
-        public ushort Type;
-        public uint UID;
-        public uint dwParam1;
-        public ushort dwParam_Lo 
-        { 
+        public ushort Size; //0
+        public ushort Type; //2
+        public TIME TimeStamp; //4
+        public uint UID; //8
+        public uint dwParam1; //12
+        public ushort dwParam_Lo
+        {
             get { return (ushort)dwParam1; }
             set { dwParam1 = (uint)((dwParam_Hi << 16) | value); }
         }
-        public ushort dwParam_Hi 
-        { 
+        public ushort dwParam_Hi
+        {
             get { return (ushort)(dwParam1 >> 16); }
             set { dwParam1 = (uint)((value << 16) | dwParam_Lo); }
         }
-        public TIME TimeStamp;
-        public DataID ID;
-        public ushort wFacing;
-        public ushort wParam1;
-        public ushort wParam2;
-        public uint dwParam2;
-        public uint dwParam3;
-        private fixed byte TQServer[8];
+        public ushort wParam1; //16
+        public ushort wParam2; //18
+        public ushort wParam3; //20
+        public DataID ID; //22
 
         public static DataPacket Create()
         {
             DataPacket packet = new DataPacket();
-            packet.Size = 0x20;
-            packet.Type = 0x271A;
+            packet.Size = 24;
+            packet.Type = 1010;
             packet.TimeStamp = TIME.Now;
-            PacketBuilder.AppendTQServer(packet.TQServer, 8);
             return packet;
         }
     }

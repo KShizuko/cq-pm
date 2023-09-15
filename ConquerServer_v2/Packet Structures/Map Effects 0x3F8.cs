@@ -33,14 +33,12 @@ namespace ConquerServer_v2.Packet_Structures
         public int Density;
         public MapEffectID ID;
         public uint Appearance;
-        public fixed byte TQServer[8];
 
         public static MapEffectPacket Create()
         {
             MapEffectPacket retn = new MapEffectPacket();
             retn.Size = 20;
             retn.Type = 0x3F8;
-            PacketBuilder.AppendTQServer(retn.TQServer, 8);
             return retn;
         }
     }

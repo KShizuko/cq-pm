@@ -23,14 +23,12 @@ namespace ConquerServer_v2.Packet_Structures
         public ushort Type;
         public TeamActionID ID;
         public uint UID;
-        private fixed byte TQServer[8];
-        
+
         public static TeamActionPacket Create()
         {
             TeamActionPacket retn = new TeamActionPacket();
             retn.Size = 0x0C;
             retn.Type = 0x3FF;
-            PacketBuilder.AppendTQServer(retn.TQServer, 8);
             return retn;
         }
     }

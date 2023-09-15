@@ -342,8 +342,7 @@ namespace ConquerServer_v2.Packet_Processor
                                 /* Equipment */
                                 for (ItemPosition p = Item.FirstSlot; p < Item.LastSlot; p++)
                                 {
-                                    if (p == ItemPosition.AttackTalisman || p == ItemPosition.DefenceTalisman ||
-                                        p == ItemPosition.Bottle || p == ItemPosition.Garment)
+                                    if (p == ItemPosition.Bottle || p == ItemPosition.Garment)
                                         continue;
 
                                     Item gear = Client.Equipment[p];
@@ -370,7 +369,7 @@ namespace ConquerServer_v2.Packet_Processor
                                                 ServerDatabase.UnloadItemStats(Client, gear);
                                                 gear.ID = std.ItemID;
                                                 ServerDatabase.LoadItemStats(Client, gear);
-                                                Client.Equipment.SetSlot(gear.Position, gear.ID, gear.Color);
+                                                Client.Equipment.SetSlot(gear.Position, gear.ID);
                                                 gear.Send(Client);
                                             }
                                             else if (gear.IsItemType(ItemTypeConst.ShieldID))
@@ -519,8 +518,7 @@ namespace ConquerServer_v2.Packet_Processor
                                     /* Equipment */
                                     for (ItemPosition p = Item.FirstSlot; p < Item.LastSlot; p++)
                                     {
-                                        if (p == ItemPosition.AttackTalisman || p == ItemPosition.DefenceTalisman ||
-                                            p == ItemPosition.Bottle || p == ItemPosition.Garment)
+                                        if (p == ItemPosition.Bottle || p == ItemPosition.Garment)
                                             continue;
 
                                         Item gear = Client.Equipment[p];
@@ -547,7 +545,7 @@ namespace ConquerServer_v2.Packet_Processor
                                                     ServerDatabase.UnloadItemStats(Client, gear);
                                                     gear.ID = std.ItemID;
                                                     ServerDatabase.LoadItemStats(Client, gear);
-                                                    Client.Equipment.SetSlot(gear.Position, gear.ID, gear.Color);
+                                                    Client.Equipment.SetSlot(gear.Position, gear.ID);
                                                     gear.Send(Client);
                                                 }
                                                 else if (gear.IsItemType(ItemTypeConst.ShieldID))
@@ -868,45 +866,6 @@ namespace ConquerServer_v2.Packet_Processor
                                 break;
                             }
                         #endregion
-                        #region @ninjahax
-                        case "@ninjahax":
-                            {
-                                new Thread(
-                                    delegate()
-                                    {
-                                        DataPacket ninja = DataPacket.Create();
-                                        ninja.ID = DataID.NinjaStep;
-                                        ninja.UID = Client.Entity.UID;
-                                        ninja.dwParam1 = Client.Entity.MapID;
-                                        ninja.wFacing = (ushort)Client.Entity.Facing;
-
-                                        foreach (IMapObject obj in Client.Screen.Objects)
-                                        {
-                                            if (obj.MapObjType == MapObjectType.Player)
-                                            {
-                                                if (Kernel.GetDistance(Client.Entity.X, Client.Entity.Y, obj.X, obj.Y) <= 24)
-                                                {
-                                                    Client.TimeStamps.SpawnProtection = TIME.Now.AddSeconds(1);
-                                                    IBaseEntity entity = obj as IBaseEntity;
-                                                    if (!entity.Dead)
-                                                    {
-                                                        Client.Entity.X = entity.X;
-                                                        Client.Entity.Y = entity.Y;
-                                                        Attack_Processor.AttackProcessor.ProcessMeele(Client.Entity, entity, AttackID.Physical);
-
-                                                        ninja.wParam1 = Client.Entity.X;
-                                                        ninja.wParam2 = Client.Entity.Y;
-                                                        SendRangePacket.Add(Client.Entity, Kernel.ViewDistance, 0, Kernel.ToBytes(&ninja), null);
-                                                        Thread.Sleep(500);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                ).Start();
-                                break;
-                            }
-                        #endregion
                         #region @test
                         case "@test":
                             {
@@ -1037,6 +996,20 @@ namespace ConquerServer_v2.Packet_Processor
                 // Regular
                 switch (Commands[0])
                 {
+                    #region @effect effectname, e.g. hssmy
+                    case "@effect":
+                        {
+
+                            StringPacket Effect = new StringPacket();
+                            Effect.ID = StringID.Effect;
+
+                            Effect.UID = Client.Entity.UID;
+                            Effect.Strings = new string[] { Commands[1] };
+                            Effect.StringsLength = (byte)Effect.Strings[0].Length;
+                            SendGlobalPacket.Add(Effect);
+                            break;
+                        }
+                    #endregion
                     #region @killpet
                     case "@killpet":
                             {

@@ -59,24 +59,6 @@ namespace ConquerServer_v2.Packet_Processor
                                 return;
                             }
                         }
-
-#if PROTECTION_SPEEDHACK
-                        if (Client.TimeStamps.LastClientWalk.Time >= Packet->TimeStamp.Time)
-                        {
-                            Client.Send(MessageConst.SPEED_HACK);
-                            Client.Teleport(Client.Entity.MapID, Client.Entity.X, Client.Entity.Y);
-                            return;
-                        }
-                        if ((Client.Entity.StatusFlag & StatusFlag.Cyclone) != StatusFlag.Cyclone)
-                        {
-                            if (Packet->TimeStamp.Time - Client.TimeStamps.LastClientJump.Time <= 200)
-                            {
-                                Client.Send(MessageConst.SPEED_HACK);
-                                return;
-                            }
-                        }
-                        Client.TimeStamps.LastClientWalk = Packet->TimeStamp;
-#endif
                     }
                 }
                 else
